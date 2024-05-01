@@ -1,0 +1,11 @@
+{
+  "itemGroup.create_cards.item_group": "Create: Cards",
+  "block.create_cards.card_inscriber": "Card Inscriber",
+  "block.create_cards.card_reader": "Card Reader",
+  "block.create_cards.card_reader.added_id": "§aAdded ID to Card Reader",
+  "block.create_cards.card_reader.removed_id": "§aRemoved ID from Reader",
+  "item.create_cards.empty_card": "Empty Card",
+  "item.create_cards.card": "Card",
+  "item.create_cards.empty_ticket": "Empty Ticket",
+  "item.create_cards.ticket": "Ticket"
+}

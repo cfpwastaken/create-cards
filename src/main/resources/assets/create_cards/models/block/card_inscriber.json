@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "create_cards:block/card_reader_top",
+    "up": "create_cards:block/card_inscrider_top",
+    "north": "create_cards:block/card_inscrider_front",
+    "east": "create_cards:block/card_inscrider_side",
+    "south": "create_cards:block/card_inscrider_side",
+    "west": "create_cards:block/card_inscrider_side",
+    "particle": "create_cards:block/card_inscrider_side"
+  },
+  "render_type": "solid"
+}

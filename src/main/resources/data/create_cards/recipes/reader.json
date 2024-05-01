@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "0": {
+      "item": "create:brass_sheet"
+    },
+    "1": {
+      "item": "create:brass_sheet"
+    },
+    "2": {
+      "item": "create:brass_sheet"
+    },
+    "3": {
+      "item": "minecraft:stone"
+    },
+    "4": {
+      "item": "minecraft:redstone"
+    },
+    "5": {
+      "item": "minecraft:stone"
+    },
+    "6": {
+      "item": "create:brass_sheet"
+    },
+    "7": {
+      "item": "minecraft:dried_kelp"
+    },
+    "8": {
+      "item": "create:brass_sheet"
+    }
+  },
+  "result": {
+    "item": "create_cards:card_reader",
+    "count": 1
+  }
+}

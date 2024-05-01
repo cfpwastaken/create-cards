@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "012",
+    "345",
+    "678"
+  ],
+  "key": {
+    "1": {
+      "item": "minecraft:stone"
+    },
+    "0": {
+      "item": "create:brass_sheet"
+    },
+    "2": {
+      "item": "create:brass_sheet"
+    },
+    "3": {
+      "item": "create:brass_sheet"
+    },
+    "4": {
+      "item": "create:mechanical_press"
+    },
+    "5": {
+      "item": "create:brass_sheet"
+    },
+    "6": {
+      "item": "create:brass_casing"
+    },
+    "7": {
+      "item": "create:brass_casing"
+    },
+    "8": {
+      "item": "create:brass_casing"
+    }
+  },
+  "result": {
+    "item": "create_cards:card_inscriber",
+    "count": 1
+  }
+}

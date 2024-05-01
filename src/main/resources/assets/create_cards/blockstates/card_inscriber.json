@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "create_cards:block/card_inscriber"
+    },
+    "facing=east": {
+      "model": "create_cards:block/card_inscriber",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "create_cards:block/card_inscriber",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "create_cards:block/card_inscriber",
+      "y": 270
+    }
+  }
+}

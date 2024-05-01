@@ -1,0 +1,35 @@
+{
+  "variants": {
+    "facing=north,powering=false": {
+      "model": "create_cards:block/card_reader"
+    },
+    "facing=east,powering=false": {
+      "model": "create_cards:block/card_reader",
+      "y": 90
+    },
+    "facing=south,powering=false": {
+      "model": "create_cards:block/card_reader",
+      "y": 180
+    },
+    "facing=west,powering=false": {
+      "model": "create_cards:block/card_reader",
+      "y": 270
+    },
+
+    "facing=north,powering=true": {
+      "model": "create_cards:block/card_reader_on"
+    },
+    "facing=east,powering=true": {
+      "model": "create_cards:block/card_reader_on",
+      "y": 90
+    },
+    "facing=south,powering=true": {
+      "model": "create_cards:block/card_reader_on",
+      "y": 180
+    },
+    "facing=west,powering=true": {
+      "model": "create_cards:block/card_reader_on",
+      "y": 270
+    }
+  }
+}

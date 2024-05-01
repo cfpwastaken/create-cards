@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "create_cards:card_inscriber",
+    "create_cards:card_reader"
+  ]
+}

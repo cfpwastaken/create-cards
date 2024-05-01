@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "create_cards",
+  "version": "${version}",
+  "name": "Create: Cards",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/cfp/create-cards"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/create_cards/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "de.cfp.createcards.client.CreateCardsClient"
+    ],
+    "main": [
+      "de.cfp.createcards.CreateCards"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
