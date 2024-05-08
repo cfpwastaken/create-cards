@@ -6,29 +6,29 @@
     "678"
   ],
   "key": {
-    "1": {
-      "item": "minecraft:stone"
-    },
     "0": {
-      "item": "create:brass_sheet"
+      "item": "create:andesite_alloy"
+    },
+    "1": {
+      "item": "create:andesite_alloy"
     },
     "2": {
-      "item": "create:brass_sheet"
+      "item": "create:andesite_alloy"
     },
     "3": {
-      "item": "create:brass_sheet"
+      "item": "create:andesite_alloy"
     },
     "4": {
-      "item": "create:mechanical_press"
+      "item": "create:brass_hand"
     },
     "5": {
-      "item": "create:brass_sheet"
+      "item": "create:andesite_alloy"
     },
     "6": {
       "item": "create:brass_casing"
     },
     "7": {
-      "item": "create:brass_casing"
+      "item": "minecraft:dried_kelp"
     },
     "8": {
       "item": "create:brass_casing"

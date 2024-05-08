@@ -1,13 +1,16 @@
 package de.cfp.createcards;
 
 import de.cfp.createcards.block.CardInscriberBlock;
+import de.cfp.createcards.block.CardInscriberBlockEntity;
 import de.cfp.createcards.block.CardReaderBlock;
 import de.cfp.createcards.block.CardReaderBlockEntity;
+import de.cfp.createcards.screen.CardInscriberScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -16,6 +19,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -25,6 +30,7 @@ public class CreateCards implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("create_cards");
     public static final Block CARD_INSCRIBER_BLOCK = new CardInscriberBlock(FabricBlockSettings.create().strength(4.0f));
+    public static final BlockEntityType<CardInscriberBlockEntity> CARD_INSCRIBER_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier("create_cards", "card_inscriber_block_entity"), FabricBlockEntityTypeBuilder.create(CardInscriberBlockEntity::new, CARD_INSCRIBER_BLOCK).build());
     public static final Block CARD_READER_BLOCK = new CardReaderBlock(FabricBlockSettings.create().strength(4.0f));
     public static final BlockEntityType<CardReaderBlockEntity> CARD_READER_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier("create_cards", "card_reader_block_entity"), FabricBlockEntityTypeBuilder.create(CardReaderBlockEntity::new, CARD_READER_BLOCK).build());
     public static final Item EMPTY_CARD = new Item(new FabricItemSettings().maxCount(1));
@@ -39,6 +45,12 @@ public class CreateCards implements ModInitializer {
                 entries.add(CARD_INSCRIBER_BLOCK);
                 entries.add(CARD_READER_BLOCK);
             }).build();
+    public static final ScreenHandlerType<CardInscriberScreenHandler> CARD_INSCRIBER_SCREEN_HANDLER;
+
+    static {
+//        CARD_INSCRIBER_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(new Identifier("create_cards", "card_inscriber_screen_handler"), CardInscriberScreenHandler::new);
+        CARD_INSCRIBER_SCREEN_HANDLER = new ScreenHandlerType<>(CardInscriberScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
+    }
 
     @Override
     public void onInitialize() {
@@ -52,6 +64,7 @@ public class CreateCards implements ModInitializer {
         Registry.register(Registries.ITEM, new Identifier("create_cards", "card"), CARD);
         Registry.register(Registries.ITEM, new Identifier("create_cards", "empty_ticket"), EMPTY_TICKET);
         Registry.register(Registries.ITEM, new Identifier("create_cards", "ticket"), TICKET);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier("create_cards", "bag"), CARD_INSCRIBER_SCREEN_HANDLER);
     }
 
     public enum IDType {
