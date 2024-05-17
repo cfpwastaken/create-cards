@@ -4,7 +4,9 @@ import de.cfp.createcards.block.CardInscriberBlock;
 import de.cfp.createcards.block.CardInscriberBlockEntity;
 import de.cfp.createcards.block.CardReaderBlock;
 import de.cfp.createcards.block.CardReaderBlockEntity;
+import de.cfp.createcards.network.CardReaderUpdatePacket;
 import de.cfp.createcards.screen.CardInscriberScreenHandler;
+import de.cfp.createcards.screen.CardReaderScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -46,10 +48,13 @@ public class CreateCards implements ModInitializer {
                 entries.add(CARD_READER_BLOCK);
             }).build();
     public static final ScreenHandlerType<CardInscriberScreenHandler> CARD_INSCRIBER_SCREEN_HANDLER;
+    public static final ScreenHandlerType<CardReaderScreenHandler> CARD_READER_SCREEN_HANDLER;
+    public static final Identifier UPDATE_CARD_READER_PACKET_ID = new Identifier("create_cards", "update_card_reader");
 
     static {
 //        CARD_INSCRIBER_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(new Identifier("create_cards", "card_inscriber_screen_handler"), CardInscriberScreenHandler::new);
         CARD_INSCRIBER_SCREEN_HANDLER = new ScreenHandlerType<>(CardInscriberScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
+        CARD_READER_SCREEN_HANDLER = new ScreenHandlerType<>(CardReaderScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
     }
 
     @Override
@@ -64,7 +69,9 @@ public class CreateCards implements ModInitializer {
         Registry.register(Registries.ITEM, new Identifier("create_cards", "card"), CARD);
         Registry.register(Registries.ITEM, new Identifier("create_cards", "empty_ticket"), EMPTY_TICKET);
         Registry.register(Registries.ITEM, new Identifier("create_cards", "ticket"), TICKET);
-        Registry.register(Registries.SCREEN_HANDLER, new Identifier("create_cards", "bag"), CARD_INSCRIBER_SCREEN_HANDLER);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier("create_cards", "inscriber"), CARD_INSCRIBER_SCREEN_HANDLER);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier("create_cards", "reader"), CARD_READER_SCREEN_HANDLER);
+        CardReaderUpdatePacket.handler();
     }
 
     public enum IDType {

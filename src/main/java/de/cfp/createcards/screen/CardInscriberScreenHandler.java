@@ -124,7 +124,6 @@ public class CardInscriberScreenHandler extends ScreenHandler {
 
     @Override
     public boolean onButtonClick(PlayerEntity player, int id) {
-        CreateCards.LOGGER.info("CLICK");
         if(!(inventory.getStack(1).getItem() instanceof InkSacItem)) {
             return false;
         }
@@ -141,7 +140,7 @@ public class CardInscriberScreenHandler extends ScreenHandler {
         }
         ItemStack card = new ItemStack(idtype == CreateCards.IDType.EMPTY_CARD ? CreateCards.CARD : CreateCards.TICKET);
         card.getOrCreateNbt().putUuid("owner", player.getUuid());
-        card.getOrCreateNbt().putUuid("id", UUID.randomUUID());
+//        card.getOrCreateNbt().putUuid("id", UUID.randomUUID());
         card.getOrCreateNbt().putString("content", content);
         if(content != "") {
             card.setCustomName(Text.literal(content));

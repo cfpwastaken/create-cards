@@ -1,6 +1,7 @@
 package de.cfp.createcards.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import de.cfp.createcards.CreateCards;
 import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.block.entity.DropperBlockEntity;
@@ -79,7 +80,6 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
         int y = (height - backgroundHeight) / 2;
 
         button = ButtonWidget.builder(Text.literal(""), btn -> {
-            CreateCards.LOGGER.info("Clicked");
             if(this.client == null) return;
             assert this.client.interactionManager != null;
             this.client.interactionManager.clickButton(((CardInscriberScreenHandler)this.handler).syncId, 0);

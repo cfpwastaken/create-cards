@@ -11,6 +11,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -79,22 +80,32 @@ public class CardReaderBlock extends HorizontalFacingBlock implements IWrenchabl
                     player.playSound(SoundEvents.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, 1, 1);
                     return ActionResult.FAIL;
                 }
-                CreateCards.IDType idtype = CreateCards.getIDType(player.getOffHandStack().getItem());
-                if (!(CreateCards.isIDValid(idtype))) {
-                    return ActionResult.FAIL;
-                }
-                NbtCompound nbt = player.getOffHandStack().getOrCreateNbt();
-                CardReaderBlockEntity.Card card = new CardReaderBlockEntity.Card(nbt.getUuid("owner"), nbt.getString("content"));
-                if(blockEntity.cards.contains(card)) {
-                    blockEntity.cards.remove(card);
-                    player.sendMessage(Text.translatable("block.create_cards.card_reader.removed_id"));
-                    blockEntity.serializeNBT();
-                    return ActionResult.SUCCESS;
-                }
-                blockEntity.cards.add(card);
-                player.sendMessage(Text.translatable("block.create_cards.card_reader.added_id"));
-                blockEntity.serializeNBT();
+                player.openHandledScreen((NamedScreenHandlerFactory) blockEntity);
                 return ActionResult.SUCCESS;
+//                if(blockEntity.owner.equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))) {
+//                    blockEntity.owner = player.getUuid();
+//                    blockEntity.serializeNBT();
+//                }
+//                if(!(blockEntity.owner.equals(player.getUuid()))) {
+//                    player.playSound(SoundEvents.BLOCK_CHEST_LOCKED, SoundCategory.BLOCKS, 1, 1);
+//                    return ActionResult.FAIL;
+//                }
+//                CreateCards.IDType idtype = CreateCards.getIDType(player.getOffHandStack().getItem());
+//                if (!(CreateCards.isIDValid(idtype))) {
+//                    return ActionResult.FAIL;
+//                }
+//                NbtCompound nbt = player.getOffHandStack().getOrCreateNbt();
+//                CardReaderBlockEntity.Card card = new CardReaderBlockEntity.Card(nbt.getUuid("owner"), nbt.getString("content"));
+//                if(blockEntity.cards.contains(card)) {
+//                    blockEntity.cards.remove(card);
+//                    player.sendMessage(Text.translatable("block.create_cards.card_reader.removed_id"));
+//                    blockEntity.serializeNBT();
+//                    return ActionResult.SUCCESS;
+//                }
+//                blockEntity.cards.add(card);
+//                player.sendMessage(Text.translatable("block.create_cards.card_reader.added_id"));
+//                blockEntity.serializeNBT();
+//                return ActionResult.SUCCESS;
             }
             CreateCards.IDType idtype = CreateCards.getIDType(player.getMainHandStack().getItem());
             if (!(CreateCards.isIDValid(idtype))) {
@@ -114,7 +125,11 @@ public class CardReaderBlock extends HorizontalFacingBlock implements IWrenchabl
                     player.getMainHandStack().setCount(0);
                 }
                 world.setBlockState(pos, state.with(POWERING, true));
-                world.scheduleBlockTick(pos, this, 15);
+                int tickDelay = blockEntity.delay;
+                if(blockEntity.delayUnit == 1) {
+                    tickDelay *= 20;
+                }
+                world.scheduleBlockTick(pos, this, tickDelay);
                 AllSoundEvents.CONFIRM.playOnServer(world, pos);
             } else {
                 AllSoundEvents.DENY.playOnServer(world, pos);
