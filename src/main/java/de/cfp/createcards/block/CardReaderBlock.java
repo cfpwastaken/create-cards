@@ -122,7 +122,14 @@ public class CardReaderBlock extends HorizontalFacingBlock implements IWrenchabl
             //if (player.getUuid().equals(uuid)) {
             if(blockEntity.cards.contains(card)) {
                 if(idtype.equals(CreateCards.IDType.TICKET)) {
-                    player.getMainHandStack().setCount(0);
+                    NbtCompound ticket = player.getMainHandStack().getOrCreateNbt();
+                    int uses = ticket.contains("uses") ? ticket.getInt("uses") : 1;
+                    int usage = ticket.contains("usage") ? ticket.getInt("usage") : 0;
+                    usage++;
+                    ticket.putInt("usage", usage);
+                    if(usage >= uses) {
+                        player.getMainHandStack().setCount(0);
+                    }
                 }
                 world.setBlockState(pos, state.with(POWERING, true));
                 int tickDelay = blockEntity.delay;

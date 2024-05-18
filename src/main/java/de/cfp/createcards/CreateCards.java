@@ -4,6 +4,7 @@ import de.cfp.createcards.block.CardInscriberBlock;
 import de.cfp.createcards.block.CardInscriberBlockEntity;
 import de.cfp.createcards.block.CardReaderBlock;
 import de.cfp.createcards.block.CardReaderBlockEntity;
+import de.cfp.createcards.item.TicketItem;
 import de.cfp.createcards.network.CardReaderUpdatePacket;
 import de.cfp.createcards.screen.CardInscriberScreenHandler;
 import de.cfp.createcards.screen.CardReaderScreenHandler;
@@ -38,7 +39,7 @@ public class CreateCards implements ModInitializer {
     public static final Item EMPTY_CARD = new Item(new FabricItemSettings().maxCount(1));
     public static final Item CARD = new Item(new FabricItemSettings().maxCount(1));
     public static final Item EMPTY_TICKET = new Item(new FabricItemSettings().maxCount(1));
-    public static final Item TICKET = new Item(new FabricItemSettings().maxCount(1));
+    public static final TicketItem TICKET = new TicketItem(new FabricItemSettings().maxCount(1));
     public static final ItemGroup ITEM_GROUP = FabricItemGroup.builder().icon(() -> new ItemStack(EMPTY_CARD))
             .displayName(Text.literal("Create: Cards"))
             .entries((ctx, entries) -> {

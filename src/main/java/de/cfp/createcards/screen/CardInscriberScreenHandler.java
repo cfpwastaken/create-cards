@@ -23,6 +23,7 @@ import java.util.UUID;
 public class CardInscriberScreenHandler extends ScreenHandler {
 
     private final Inventory inventory;
+    int ticketUses = 10;
 
     public CardInscriberScreenHandler(int syncId, PlayerInventory inventory) {
         this(syncId, inventory, new SimpleInventory(4));
@@ -144,6 +145,10 @@ public class CardInscriberScreenHandler extends ScreenHandler {
         card.getOrCreateNbt().putString("content", content);
         if(content != "") {
             card.setCustomName(Text.literal(content));
+        }
+        if(idtype.equals(CreateCards.IDType.EMPTY_TICKET)) {
+            card.getOrCreateNbt().putInt("uses", id);
+            card.getOrCreateNbt().putInt("usage", 0);
         }
         inventory.removeStack(0);
         inventory.removeStack(1, 1);

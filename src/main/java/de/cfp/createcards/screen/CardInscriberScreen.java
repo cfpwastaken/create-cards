@@ -1,6 +1,7 @@
 package de.cfp.createcards.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import de.cfp.createcards.CreateCards;
 import net.minecraft.block.entity.DispenserBlockEntity;
@@ -15,11 +16,13 @@ import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.IconButtonWidget;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
+import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 
 public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandler> {
@@ -28,6 +31,7 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
     private static final Identifier TEXTURE = new Identifier("create_cards", "textures/gui/inscriber_gui.png");
     private static final Identifier BUTTON_TEXTURE = new Identifier("create_cards", "textures/gui/card.png");
     private static final Identifier BUTTON_ACTIVE_TEXTURE = new Identifier("create_cards", "textures/gui/card_active.png");
+    private static final Identifier USES_FIELD_TEXTURE = new Identifier("create_cards", "textures/gui/usesfield.png");
     private ButtonWidget button;
 
     public CardInscriberScreen(CardInscriberScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -44,6 +48,36 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
     }
 
     @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        super.mouseScrolled(mouseX, mouseY, amount);
+
+        int x = (width - backgroundWidth) / 2;
+        int y = (height - backgroundHeight) / 2;
+        if(isMouseWithinArea((int)mouseX, (int)mouseY, x+12, y+47, 25, 20)) {
+            getScreenHandler().ticketUses += (int) amount;
+            if(getScreenHandler().ticketUses < 1) {
+                getScreenHandler().ticketUses = 1;
+            } else if(getScreenHandler().ticketUses > 60) {
+                getScreenHandler().ticketUses = 60;
+            }
+            MinecraftClient.getInstance()
+                    .getSoundManager()
+                    .play(PositionedSoundInstance.master(AllSoundEvents.SCROLL_VALUE.getMainEvent(), 1.5F + 0.1f * (getScreenHandler().ticketUses - 1) / (60 - 1)));
+        }
+        return true;
+    }
+
+//    @Override
+//    public void mouseMoved(double mouseX, double mouseY) {
+//        super.mouseMoved(mouseX, mouseY);
+//        int x = (width - backgroundWidth) / 2;
+//        int y = (height - backgroundHeight) / 2;
+//        if(isMouseWithinArea((int)mouseX, (int)mouseY, x+12, y+47, 25, 20)) {
+//            CreateCards.LOGGER.info(Math.random() + "");
+//        }
+//    }
+
+    @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
 //        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 //        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -57,6 +91,11 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
             context.drawTexture(BUTTON_TEXTURE, x + 58, y + 48, 0, 0, 18, 18, 18, 18);
         } else {
             context.drawTexture(BUTTON_ACTIVE_TEXTURE, x + 58, y + 48, 0, 0, 18, 18, 18, 18);
+        }
+
+        if(CreateCards.getIDType(getScreenHandler().getSlot(0).getStack().getItem()) == CreateCards.IDType.EMPTY_TICKET) {
+            context.drawTexture(USES_FIELD_TEXTURE, x+12, y+38, 0, 0, 25, 29, 25, 29);
+            context.drawText(textRenderer, Text.literal(getScreenHandler().ticketUses + ""), x+16, y+53, Colors.WHITE, true);
         }
     }
 
@@ -82,7 +121,7 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
         button = ButtonWidget.builder(Text.literal(""), btn -> {
             if(this.client == null) return;
             assert this.client.interactionManager != null;
-            this.client.interactionManager.clickButton(((CardInscriberScreenHandler)this.handler).syncId, 0);
+            this.client.interactionManager.clickButton(((CardInscriberScreenHandler)this.handler).syncId, getScreenHandler().ticketUses);
         }).dimensions(x + 58, y + 48, 18, 18).tooltip(Tooltip.of(Text.literal("Inscribe"))).build();
 
         addSelectableChild(button); // dont render
