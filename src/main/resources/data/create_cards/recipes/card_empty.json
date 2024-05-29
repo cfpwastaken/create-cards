@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create_cards:card"
+    }
+  ],
+  "result": {
+    "item": "create_cards:empty_card",
+    "count": 1
+  }
+}

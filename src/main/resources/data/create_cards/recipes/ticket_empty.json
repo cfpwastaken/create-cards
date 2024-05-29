@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create_cards:ticket"
+    }
+  ],
+  "result": {
+    "item": "create_cards:empty_ticket",
+    "count": 1
+  }
+}
