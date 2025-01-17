@@ -3,12 +3,12 @@
   "id": "create_cards",
   "version": "${version}",
   "name": "Create: Cards",
-  "description": "",
+  "description": "Adding Cards to Create",
   "authors": [],
   "contact": {
     "repo": "https://github.com/cfp/create-cards"
   },
-  "license": "All-Rights-Reserved",
+  "license": "GPL-3.0",
   "icon": "assets/create_cards/icon.png",
   "environment": "*",
   "entrypoints": {
