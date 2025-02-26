@@ -125,10 +125,23 @@ public class CardReaderBlock extends HorizontalFacingBlock implements IWrenchabl
                     NbtCompound ticket = player.getMainHandStack().getOrCreateNbt();
                     int uses = ticket.contains("uses") ? ticket.getInt("uses") : 1;
                     int usage = ticket.contains("usage") ? ticket.getInt("usage") : 0;
-                    usage++;
-                    ticket.putInt("usage", usage);
-                    if(usage >= uses) {
-                        player.getMainHandStack().setCount(0);
+                    boolean keep = ticket.contains("keepUsed") && ticket.getBoolean("keepUsed");
+
+                    if (usage < uses) {
+                        usage++;
+                        ticket.putInt("usage", usage);
+                        ticket.putInt("remaining", uses - usage);
+
+                        if (usage >= uses && !keep) {
+                            player.getMainHandStack().setCount(0);
+                        }
+                    } else {
+                        if (keep) {
+                            AllSoundEvents.DENY.playOnServer(world, pos);
+                            return ActionResult.SUCCESS;
+                        } else {
+                            player.getMainHandStack().setCount(0);
+                        }
                     }
                 }
                 world.setBlockState(pos, state.with(POWERING, true));

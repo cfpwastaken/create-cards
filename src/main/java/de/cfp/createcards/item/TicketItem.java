@@ -37,7 +37,9 @@ public class TicketItem extends Item {
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        return getUses(stack) != -1;
+        float usage = getUsage(stack);
+        float uses = getUses(stack);
+        return usage < uses && uses != -1.0F;
     }
 
     @Override
@@ -63,6 +65,8 @@ public class TicketItem extends Item {
         if(isItemBarVisible(stack)) {
             tooltip.add(Text.literal((int)getUsage(stack) + "/" + (int)getUses(stack)));
             tooltip.add(Text.literal((int)(getUses(stack) - getUsage(stack)) + " left"));
+        } else {
+            tooltip.add(Text.literal("Used Ticket"));
         }
     }
 }
