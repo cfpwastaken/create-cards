@@ -136,12 +136,11 @@ public class CardReaderBlock extends HorizontalFacingBlock implements IWrenchabl
                             player.getMainHandStack().setCount(0);
                         }
                     } else {
-                        if (keep) {
-                            AllSoundEvents.DENY.playOnServer(world, pos);
-                            return ActionResult.SUCCESS;
-                        } else {
+                        if (!keep) {
                             player.getMainHandStack().setCount(0);
                         }
+                        AllSoundEvents.DENY.playOnServer(world, pos);
+                        return ActionResult.SUCCESS;
                     }
                 }
                 world.setBlockState(pos, state.with(POWERING, true));
