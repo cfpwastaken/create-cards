@@ -7,5 +7,6 @@
   "item.create_cards.empty_card": "Leere Karte",
   "item.create_cards.card": "Karte",
   "item.create_cards.empty_ticket": "Leeres Ticket",
-  "item.create_cards.ticket": "Ticket"
+  "item.create_cards.ticket": "Ticket",
+  "tooltip.create_cards.used_ticket": "Benutztes Ticket"
 }
