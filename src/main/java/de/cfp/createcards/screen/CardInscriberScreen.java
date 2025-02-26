@@ -1,26 +1,14 @@
 package de.cfp.createcards.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.create.AllSoundEvents;
-import com.simibubi.create.foundation.gui.widget.ScrollInput;
 import de.cfp.createcards.CreateCards;
-import net.minecraft.block.entity.DispenserBlockEntity;
-import net.minecraft.block.entity.DropperBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.BeaconScreen;
-import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
-import net.minecraft.client.gui.screen.ingame.Generic3x3ContainerScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.IconButtonWidget;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.EnchantmentScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
@@ -32,7 +20,13 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
     private static final Identifier BUTTON_TEXTURE = new Identifier("create_cards", "textures/gui/card.png");
     private static final Identifier BUTTON_ACTIVE_TEXTURE = new Identifier("create_cards", "textures/gui/card_active.png");
     private static final Identifier USES_FIELD_TEXTURE = new Identifier("create_cards", "textures/gui/usesfield.png");
-    private ButtonWidget button;
+    private static final Identifier ON_TEXTURE = new Identifier("create_cards", "textures/gui/on.png");
+    private static final Identifier ON_HOVER_TEXTURE = new Identifier("create_cards", "textures/gui/on_hover.png");
+    private static final Identifier OFF_TEXTURE = new Identifier("create_cards", "textures/gui/off.png");
+    private static final Identifier OFF_HOVER_TEXTURE = new Identifier("create_cards", "textures/gui/off_hover.png");
+
+    private ButtonWidget inscribeButton;
+    private ButtonWidget keepUsedButton;
 
     public CardInscriberScreen(CardInscriberScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -94,6 +88,20 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
         }
 
         if(CreateCards.getIDType(getScreenHandler().getSlot(0).getStack().getItem()) == CreateCards.IDType.EMPTY_TICKET) {
+            var keepUsed = getScreenHandler().keepUsed;
+            isHoveringButton = isMouseWithinArea(mouseX, mouseY, x + 119, y + 19, 18, 18);
+            if(keepUsed) {
+                context.drawTexture(
+                        isHoveringButton ? ON_HOVER_TEXTURE : ON_TEXTURE,
+                        x + 119, y + 19, 0, 0, 18,18, 18, 18);
+            } else {
+                context.drawTexture(
+                        isHoveringButton ? OFF_HOVER_TEXTURE : OFF_TEXTURE,
+                        x + 119, y + 19, 0, 0, 18,18, 18, 18);
+            }
+            context.drawText(textRenderer, Text.literal("Keep"), x + 139, y + 19, Colors.WHITE, true);
+            context.drawText(textRenderer, Text.literal("Used"), x + 139, y + 29, Colors.WHITE, true);
+
             context.drawTexture(USES_FIELD_TEXTURE, x+12, y+38, 0, 0, 25, 29, 25, 29);
             context.drawText(textRenderer, Text.literal(getScreenHandler().ticketUses + ""), x+16, y+53, Colors.WHITE, true);
         }
@@ -118,13 +126,24 @@ public class CardInscriberScreen extends HandledScreen<CardInscriberScreenHandle
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
 
-        button = ButtonWidget.builder(Text.literal(""), btn -> {
+        inscribeButton = ButtonWidget.builder(Text.literal(""), btn -> {
             if(this.client == null) return;
             assert this.client.interactionManager != null;
-            this.client.interactionManager.clickButton(((CardInscriberScreenHandler)this.handler).syncId, getScreenHandler().ticketUses);
+            int uses = getScreenHandler().ticketUses;
+            //boolean keepOnUse =  getScreenHandler().keepUsed;
+            //int id = (uses << 1) | (keepOnUse ? 1 : 0);
+            this.client.interactionManager.clickButton(((CardInscriberScreenHandler)this.handler).syncId, uses);
         }).dimensions(x + 58, y + 48, 18, 18).tooltip(Tooltip.of(Text.literal("Inscribe"))).build();
 
-        addSelectableChild(button); // dont render
+        keepUsedButton = ButtonWidget.builder(Text.literal(""), btn -> {
+            if(this.client == null) return;
+            assert this.client.interactionManager != null;
+            getScreenHandler().keepUsed = !getScreenHandler().keepUsed;
+            this.client.interactionManager.clickButton(((CardInscriberScreenHandler)this.handler).syncId, 999);
+        }).dimensions(x + 119, y + 19, 18, 18).tooltip(Tooltip.of(Text.literal("Keep Used"))).build();
+
+        addSelectableChild(inscribeButton); // dont render
+        addSelectableChild(keepUsedButton);
     }
 
 }

@@ -1,7 +1,6 @@
 package de.cfp.createcards.screen;
 
 import de.cfp.createcards.CreateCards;
-import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -9,21 +8,17 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.InkSacItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.NameTagItem;
-import net.minecraft.screen.CraftingScreenHandler;
-import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import org.apache.logging.log4j.core.pattern.PlainTextRenderer;
-
-import java.util.UUID;
 
 public class CardInscriberScreenHandler extends ScreenHandler {
 
     private final Inventory inventory;
     int ticketUses = 10;
+    boolean keepUsed = false;
 
     public CardInscriberScreenHandler(int syncId, PlayerInventory inventory) {
         this(syncId, inventory, new SimpleInventory(4));
@@ -125,35 +120,46 @@ public class CardInscriberScreenHandler extends ScreenHandler {
 
     @Override
     public boolean onButtonClick(PlayerEntity player, int id) {
-        if(!(inventory.getStack(1).getItem() instanceof InkSacItem)) {
-            return false;
-        }
-        if(!(inventory.getStack(2).getItem() instanceof NameTagItem)) {
-            return false;
-        }
-        CreateCards.IDType idtype = CreateCards.getIDType(inventory.getStack(0).getItem());
-        if(!(CreateCards.isIDEmpty(idtype))) {
-            return false;
-        }
-        String content = inventory.getStack(2).getName().getString();
-        if(!inventory.getStack(2).hasCustomName()) {
-            content = "";
-        }
-        ItemStack card = new ItemStack(idtype == CreateCards.IDType.EMPTY_CARD ? CreateCards.CARD : CreateCards.TICKET);
-        card.getOrCreateNbt().putUuid("owner", player.getUuid());
+        if(id == 999) {
+            this.keepUsed = !this.keepUsed;
+            return true;
+        } else {
+            //boolean keepOnUse = (id & 1) == 1;
+            //int uses = Math.max(1, Math.min(60, id >> 1));
+            if(!(inventory.getStack(1).getItem() instanceof InkSacItem)) {
+                return false;
+            }
+            if(!(inventory.getStack(2).getItem() instanceof NameTagItem)) {
+                return false;
+            }
+            CreateCards.IDType idtype = CreateCards.getIDType(inventory.getStack(0).getItem());
+            if(!(CreateCards.isIDEmpty(idtype))) {
+                return false;
+            }
+            String content = inventory.getStack(2).getName().getString();
+            if(!inventory.getStack(2).hasCustomName()) {
+                content = "";
+            }
+            ItemStack card = new ItemStack(idtype == CreateCards.IDType.EMPTY_CARD ? CreateCards.CARD : CreateCards.TICKET);
+            card.getOrCreateNbt().putUuid("owner", player.getUuid());
 //        card.getOrCreateNbt().putUuid("id", UUID.randomUUID());
-        card.getOrCreateNbt().putString("content", content);
-        if(content != "") {
-            card.setCustomName(Text.literal(content));
+            card.getOrCreateNbt().putString("content", content);
+            if(content != "") {
+                card.setCustomName(Text.literal(content));
+            }
+            if(idtype.equals(CreateCards.IDType.EMPTY_TICKET)) {
+                card.getOrCreateNbt().putInt("uses", id);
+                card.getOrCreateNbt().putInt("usage", 0);
+                card.getOrCreateNbt().putInt("remaining", id);
+                if(this.keepUsed) {
+                    card.getOrCreateNbt().putBoolean("keepUsed", true);
+                }
+            }
+            inventory.removeStack(0);
+            inventory.removeStack(1, 1);
+            inventory.setStack(3, card);
+            player.playSound(SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.BLOCKS, 1, 1);
+            return true;
         }
-        if(idtype.equals(CreateCards.IDType.EMPTY_TICKET)) {
-            card.getOrCreateNbt().putInt("uses", id);
-            card.getOrCreateNbt().putInt("usage", 0);
-        }
-        inventory.removeStack(0);
-        inventory.removeStack(1, 1);
-        inventory.setStack(3, card);
-        player.playSound(SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.BLOCKS, 1, 1);
-        return true;
     }
 }
