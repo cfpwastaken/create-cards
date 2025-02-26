@@ -7,5 +7,6 @@
   "item.create_cards.empty_card": "Empty Card",
   "item.create_cards.card": "Card",
   "item.create_cards.empty_ticket": "Empty Ticket",
-  "item.create_cards.ticket": "Ticket"
+  "item.create_cards.ticket": "Ticket",
+  "tooltip.create_cards.used_ticket": "Used Ticket"
 }

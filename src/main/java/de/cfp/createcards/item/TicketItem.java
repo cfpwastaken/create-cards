@@ -35,6 +35,15 @@ public class TicketItem extends Item {
         return tag.getFloat("uses");
     }
 
+    public float getRemainingUses(ItemStack stack) {
+        if(!stack.hasNbt())
+            return -1;
+        NbtCompound tag = stack.getNbt();
+        if(!tag.contains("remaining"))
+            return -1;
+        return tag.getFloat("remaining");
+    }
+
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
         float usage = getUsage(stack);
@@ -65,8 +74,8 @@ public class TicketItem extends Item {
         if(isItemBarVisible(stack)) {
             tooltip.add(Text.literal((int)getUsage(stack) + "/" + (int)getUses(stack)));
             tooltip.add(Text.literal((int)(getUses(stack) - getUsage(stack)) + " left"));
-        } else {
-            tooltip.add(Text.literal("Used Ticket"));
+        } else if (getRemainingUses(stack) == 0) {
+            tooltip.add(Text.translatable("tooltip.create_cards.used_ticket"));
         }
     }
 }
