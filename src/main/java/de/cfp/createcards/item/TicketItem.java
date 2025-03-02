@@ -46,9 +46,7 @@ public class TicketItem extends Item {
 
     @Override
     public boolean isItemBarVisible(ItemStack stack) {
-        float usage = getUsage(stack);
-        float uses = getUses(stack);
-        return usage < uses && uses != -1.0F;
+        return getUses(stack) != -1;
     }
 
     @Override
@@ -72,10 +70,12 @@ public class TicketItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if(isItemBarVisible(stack)) {
-            tooltip.add(Text.literal((int)getUsage(stack) + "/" + (int)getUses(stack)));
-            tooltip.add(Text.literal((int)(getUses(stack) - getUsage(stack)) + " left"));
-        } else if (getRemainingUses(stack) == 0) {
-            tooltip.add(Text.translatable("tooltip.create_cards.used_ticket"));
+            if (getRemainingUses(stack) == 0) {
+                tooltip.add(Text.translatable("tooltip.create_cards.used_ticket"));
+            } else {
+                tooltip.add(Text.literal((int)getUsage(stack) + "/" + (int)getUses(stack)));
+                tooltip.add(Text.literal((int)(getUses(stack) - getUsage(stack)) + " left"));
+            }
         }
     }
 }
